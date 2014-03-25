@@ -1,4 +1,4 @@
-Rottweiler
+django-rottweiler
 ==========
 
 A permission model that wraps django-rulez to allow the checking of
