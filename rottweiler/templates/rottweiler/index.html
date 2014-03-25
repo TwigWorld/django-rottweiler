@@ -10,11 +10,11 @@
         {% for perms in ru.permissions %}
             <tr>
                 <td style="border: 1px solid black;">
-                    {{perms.name}}
+                    {{ perms.name }}
                 </td>
                 <td style="border: 1px solid black;">
                     <pre>
-                        {{perms.definition|linebreaks}}
+                        {{ perms.definition|linebreaks }}
                     </pre>
                 </td>
             </tr>

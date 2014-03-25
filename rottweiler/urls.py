@@ -6,5 +6,5 @@ from .views import ShowAllRules
 
 urlpatterns = patterns(
     '',
-    url(r'^show_all_rules$', ShowAllRules.as_view(), name="rottweiler_show_all"),
+    url(r'^show-all-rules$', ShowAllRules.as_view(), name="rottweiler_show_all"),
 )

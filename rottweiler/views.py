@@ -2,6 +2,7 @@ import inspect
 
 from rulez import registry
 
+from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView
 
 
@@ -9,6 +10,9 @@ class ShowAllRules(DetailView):
     template_name = 'rottweiler/index.html'
 
     def get_object(self, queryset=None):
+        if not self.request.user.is_superuser:
+            raise PermissionDenied
+
         all_rules = []
 
         for k,v in registry.registry.iteritems():
