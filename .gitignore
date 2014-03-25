@@ -1,0 +1,6 @@
+*.pyc
+/build
+/dist
+*.swp
+/django_rottweiler.egg-info
+.DS_Store

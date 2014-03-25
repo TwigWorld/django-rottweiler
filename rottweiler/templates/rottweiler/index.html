@@ -1,0 +1,25 @@
+<html>
+<body>
+    {% for ru in object %}
+    <h2>{{ru.model_name}}</h2>
+    <table>
+        <tr>
+            <th style="border: 1px solid black;">Rule</th>
+            <th style="border: 1px solid black;">Definition</th>
+        </tr>
+        {% for perms in ru.permissions %}
+            <tr>
+                <td style="border: 1px solid black;">
+                    {{perms.name}}
+                </td>
+                <td style="border: 1px solid black;">
+                    <pre>
+                        {{perms.definition|linebreaks}}
+                    </pre>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</body>
+</html>
