@@ -2,7 +2,7 @@ Rottweiler
 ==========
 
 A permission model that wraps django-rulez to allow the checking of
-global permissions as well as object level permissions.
+global permissions as well as object-level permissions.
 
 Separates permission logic into a permission module located in an app's
 directory.
@@ -16,6 +16,13 @@ directory.
 ### To do
 
  - Allow one line conditional for checking permissions in template
+
+
+Dependencies
+------------
+
+ - Django >= 1.4
+ - Django-Rulez == 1.0.1
 
 
 Overview
@@ -39,7 +46,7 @@ Overview
  - Template tag for checking global permissions.
 
     A template tag that extends django-rulez functionality to allow for
-    the checking of global permissions as well as object level
+    the checking of global permissions as well as object-level
     permissions.
 
  - Web interface for listing permission definitions.
