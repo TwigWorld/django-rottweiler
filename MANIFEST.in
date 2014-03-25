@@ -1,5 +1,4 @@
 include setup.py
 include README.md
 include MANIFEST.in
-recursive-include rottweiler/templates *
-recursive-include rottweiler/templatetags *
+recursive-include rottweiler *
