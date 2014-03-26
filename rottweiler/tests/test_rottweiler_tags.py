@@ -21,6 +21,7 @@ class TestRottweilerPerms(TestCase):
                           positive_permission,
                           ModelStub)
         user = User()
+        user.save()
         context = Context({'user': user, 'object': ModelStub()})
         template = Template("""
             {% load rottweiler_tags %}
@@ -34,6 +35,7 @@ class TestRottweilerPerms(TestCase):
                           negative_permission,
                           ModelStub)
         user = User()
+        user.save()
         context = Context({'user': user, 'object': ModelStub()})
         template = Template("""
             {% load rottweiler_tags %}
@@ -46,6 +48,7 @@ class TestRottweilerPerms(TestCase):
         registry.register('positive_permission',
                           positive_permission)
         user = User()
+        user.save()
         context = Context({'user': user})
         template = Template("""
             {% load rottweiler_tags %}
@@ -58,6 +61,7 @@ class TestRottweilerPerms(TestCase):
         registry.register('negative_permission',
                           negative_permission)
         user = User()
+        user.save()
         context = Context({'user': user})
         template = Template("""
             {% load rottweiler_tags %}

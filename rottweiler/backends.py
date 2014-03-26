@@ -1,3 +1,4 @@
+from django.contrib.auth.backends import ModelBackend
 from rulez.backends import ObjectPermissionBackend
 from .global_permission import GlobalPermission
 
@@ -8,6 +9,9 @@ class PermissionBackend(object):
     instance or otherwise checks whether they have global permissions.
     """
     def has_perm(self, user_obj, perm, obj=None):
+        if ModelBackend().has_perm(user_obj, perm):
+            return True
+
         if obj is None:
             obj = GlobalPermission()
 

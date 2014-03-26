@@ -13,9 +13,11 @@ class TestRegistry(TestCase):
     def test_add_object_permission(self):
         registry.register('test_permission', test_permission, ModelStub)
         user = User()
+        user.save()
         self.assertTrue(user.has_perm('test_permission', ModelStub()))
 
     def test_add_global_permission(self):
         registry.register('test_permission', test_permission)
         user = User()
+        user.save()
         self.assertTrue(user.has_perm('test_permission'))
