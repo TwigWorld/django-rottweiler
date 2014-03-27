@@ -1,6 +1,6 @@
 import inspect
 
-from rulez import registry
+from rulez.registry import registry
 
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView
@@ -15,13 +15,17 @@ class ShowAllRules(DetailView):
 
         all_rules = []
 
-        for k,v in registry.registry.iteritems():
+        for k, v in registry.iteritems():
             class_name = k.__name__
             permissions = []
             for rule_name, rule in v.iteritems():
-                definition = "".join(inspect.getsourcelines(getattr(rule.model(),rule.field_name))[0][1:])
-                permissions.append({'name': rule_name, 'definition': definition})
+                definition = "".join(
+                    inspect.getsourcelines(
+                        getattr(rule.model(), rule.field_name))[0][1:])
+                permissions.append({'name': rule_name,
+                                    'definition': definition})
 
-            all_rules.append({'model_name': class_name, 'permissions': permissions})
+            all_rules.append({'model_name': class_name,
+                              'permissions': permissions})
 
         return all_rules
