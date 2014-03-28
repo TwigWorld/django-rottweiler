@@ -10,10 +10,12 @@ install:
   - pip install -q -e . --use-mirrors
 script:
   - coverage run --source=rottweiler tests/testapp/manage.py test rottweiler
+after_success:
+  - coveralls
 notifications:
   hipchat:
     rooms:
-      secure: "Bv/nYpAsoSr4kQC9vXixdOEcU5rwza551hEHOrnCEj/dU5cvuSkbyQIVW4SKBkidVHmS/OQjKhxhpniuw7GTzfGCe2cBj1MsyLy4TFs9FEIE0vWhj0w/ZtkSvHIdAoP94qRr13CT2kSM7MLj/DzjET0GBpeltWly4KdiTo3okGY="
+      secure: "nC3jkmUXAffoVoQ4Vm1tuVr6IADYPIbG3V6d/5+6MxsATqzO1DbSjbZ5Gr/NVuD2GksBItah/8CjAWFl3OvEqsoy+Bs/uuq/xQLH66pyulUAMc2jN+Gkgdsgzp5utBCmB2WmNU/a/t2YDNaRu1yvWO5l2x7hFYZ+dvPVueQU7mg="
     template:
       - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} (<a href="%{build_url}">Details</a>/<a href="%{compare_url}">Change view</a>)'
     format: html

@@ -1,3 +1,9 @@
+.. image:: https://travis-ci.org/TwigWorld/django-rottweiler.png
+  :target: https://travis-ci.org/TwigWorld/django-rottweiler
+
+.. image:: https://coveralls.io/repos/TwigWorld/django-rottweiler/badge.png?branch=master
+   :target: https://coveralls.io/r/TwigWorld/django-rottweiler?branch=master
+
 django-rottweiler
 ==========
 
