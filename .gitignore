@@ -7,3 +7,4 @@
 .coverage
 .coveragerc
 coverage.xml
+htmlcov
