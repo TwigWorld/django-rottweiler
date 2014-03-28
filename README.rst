@@ -14,12 +14,14 @@ Separates permission logic into a permission module located in an app's
 directory.
 
 
-### Revision history
+Revision history
+----------------
 
  - 25/03/2014: First release
 
 
-### To do
+To do
+-----
 
  - Allow one line conditional for checking permissions in template
 
@@ -68,36 +70,24 @@ Configuration
  - Add rottweiler to the list of INSTALLED_APPS in settings.py
 
  - Add the rottweiler authentication backend to the list of
-   AUTHENTICATION_BACKENDS in settings.py:
+   AUTHENTICATION_BACKENDS in settings.py::
 
-```python
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend', # Django's default auth backend
-    'rottweiler.backends.PermissionBackend'
-]
-
-```
+    AUTHENTICATION_BACKENDS = [
+        'django.contrib.auth.backends.ModelBackend', # Django's default auth backend
+        'rottweiler.backends.PermissionBackend'
+    ]
 
  - If you want to load permissions from permission modules in each app
-   add the following into your project's urls.py file:
+   add the following into your project's urls.py file::
 
-```python
-
-import rottweiler
-rottweiler.fetch_permissions()
-
-```
+    import rottweiler
+    rottweiler.fetch_permissions()
 
  - If you want to be able to see the list of permission definitions through the
    web interface, simply add the following url pattern into your project's urls.py
-   file:
-   
-```python
+   file::
 
-url('rottweiler', include('rottweiler.urls'))
-
-```
+    url('rottweiler', include('rottweiler.urls'))
 
 Then simply visit the url '/rottweiler/show_all_rules/' to see a list of all
 permission definitions.
@@ -105,78 +95,62 @@ permission definitions.
 An Example Using Global Permissions
 -----------------------------------
 
-The following is a simple example using global permissions:
- 
-```python
+The following is a simple example using global permissions::
 
-# permissions.py
+    # permissions.py
 
-from rottweiler import registry
+    from rottweiler import registry
 
 
-def can_access(self, user):
-	return user.is_staff
-	
-	
-registry.register('can_access', can_access)
+    def can_access(self, user):
+    	return user.is_staff
 
-```
+
+    registry.register('can_access', can_access)
 
 This will register the 'can_access' permission as a global permission which can
-then be checked in the normal way.
+then be checked in the normal way.::
 
-```python
+    user = User(is_staff=True)
+    user.has_perm('can_access')
+    => True
 
-user = User(is_staff=True)
-user.has_perm('can_access')
-=> True
-
-user = User(is_staff=False)
-user.has_perm('can_access')
-=> False
-
-```
+    user = User(is_staff=False)
+    user.has_perm('can_access')
+    => False
 
 Another Example Using Object-Level Permissions
 ----------------------------------------------
 
-Registering object-level permissions is a similar process:
+Registering object-level permissions is a similar process::
 
-```python
+    # permissions.py
 
-# permissions.py
-
-from rottweiler import registry
-from .models import MyModel
+    from rottweiler import registry
+    from .models import MyModel
 
 
-def can_access_object(self, user):
-	if user.related_model == self:
-		return True
-	else:
-		return False
-		
-		
-registry.register('can_access_object', can_access_object, MyModel)
+    def can_access_object(self, user):
+    	if user.related_model == self:
+    		return True
+    	else:
+    		return False
 
-```
+
+    registry.register('can_access_object', can_access_object, MyModel)
 
 This will register the permission against MyModel so that when a user attempts
-to check this permission, they must pass in an instance of MyModel.
+to check this permission, they must pass in an instance of MyModel.::
 
-```python
+    first_model = MyModel()
+    second_model = MyModel()
+    user = User(related_model=first_model)
 
-first_model = MyModel()
-second_model = MyModel()
-user = User(related_model=first_model)
+    user.has_perm('can_access_object', first_model)
+    => True
 
-user.has_perm('can_access_object', first_model)
-=> True
-
-user.has_perm('can_access_object', second_model)
-=> False
-
-```
+    user.has_perm('can_access_object', second_model)
+    => False
 
 Template Tags
 -------------
@@ -184,30 +158,22 @@ Template Tags
 Rottweiler also provides a template tag that works similarly for both global
 and object-level permissions.
 
-Firstly, an example checking global permissions.
+Firstly, an example checking global permissions.::
 
-```python
+    {% rottweiler_perms can_edit as boolean_varname %}
+    {% if boolean_varname %}
+    	You have permission to perform this action.
+    {% else %}
+    	You do not have permission to perform this action.
+    {% endif %}
 
-{% rottweiler_perms can_edit as boolean_varname %}
-{% if boolean_varname %}
-	You have permission to perform this action.
-{% else %}
-	You do not have permission to perform this action.
-{% endif %}
+Finally, an example checking object-level permissions.::
 
-```
+    {% load rottweiler_tags %}
 
-Finally, an example checking object-level permissions.
-
-```python
-
-{% load rottweiler_tags %}
-
-{% rottweiler_perms can_edit an_instance as boolean_varname %}
-{% if boolean_varname %}
-	You have permission to view this instance.
-{% else %}
-	You do not have permission to view this instance.
-{% endif %}
-
-```
+    {% rottweiler_perms can_edit an_instance as boolean_varname %}
+    {% if boolean_varname %}
+    	You have permission to view this instance.
+    {% else %}
+    	You do not have permission to view this instance.
+    {% endif %}
