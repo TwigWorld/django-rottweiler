@@ -9,7 +9,7 @@ install:
   - pip install -q coveralls --use-mirrors
   - pip install -q -e . --use-mirrors
 script:
-  - coverage run --source=rottweiler tests/testapp/manage.py test rottweiler
+  - ./runtests.sh --ci
 after_success:
   - coveralls
 notifications:

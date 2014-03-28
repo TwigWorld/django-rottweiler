@@ -4,3 +4,6 @@
 *.swp
 /django_rottweiler.egg-info
 .DS_Store
+.coverage
+.coveragerc
+coverage.xml
