@@ -5,7 +5,8 @@ env:
   - DJANGO=1.6
 install:
   - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -q django-rulez==1.0.1
+  - pip install -q django-rulez==1.0.1 --use-mirrors
+  - pip install -q coveralls --use-mirrors
   - pip install -q -e . --use-mirrors
 script:
   - coverage run --source=rottweiler tests/testapp/manage.py test rottweiler
