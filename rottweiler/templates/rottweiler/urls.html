@@ -15,7 +15,7 @@
                         {{ ru.module}}.{{ ru.name }}
                     </td>
                     <td>
-                        <a href="{% url 'list_perms' app_label=ru.permission_applabel codename=ru.permission_codename %}">{{ ru.permission_applabel }}.{{ ru.permission_codename }}</a>
+                        <a href="{% url 'rottweiler:show_permission' app_label=ru.permission_applabel codename=ru.permission_codename %}">{{ ru.permission_applabel }}.{{ ru.permission_codename }}</a>
                     </td>
                 </tr>
             {% endfor %}

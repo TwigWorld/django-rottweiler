@@ -1,6 +1,6 @@
 <html>
     <body>
-        <a href="{% url 'list_urls' %}">Back to urls</a>
+        <a href="{% url 'rottweiler:all_urls' %}">Back to urls</a>
         <h2>User groups</h2>
             <ul>
                 {% for group in user_groups %}
@@ -14,8 +14,10 @@
                 {% endfor %}
             </ul>
         <h2>Roles</h2>
-        <pre>
-            {{role|linebreaks}}
-        </pre>
+            {% for role in roles %}
+                <pre>
+                    {{role|linebreaks}}
+                </pre>
+            {% endfor %}
     </body>
 </html>
