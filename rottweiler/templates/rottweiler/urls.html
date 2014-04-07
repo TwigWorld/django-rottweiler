@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <table>
+            <tr>
+                <th style="border: 1px solid black;">URL</th>
+                <th style="border: 1px solid black;">View class</th>
+                <th style="border: 1px solid black;">Permission name</th>
+            </tr>
+            {% for ru in object %}
+                <tr>
+                    <td>
+                        {{ ru.url }}
+                    </td>
+                    <td>
+                        {{ ru.module}}.{{ ru.name }}
+                    </td>
+                    <td>
+                        <a href="{% url 'rottweiler:show_permission' app_label=ru.permission_applabel codename=ru.permission_codename %}">{{ ru.permission_applabel }}.{{ ru.permission_codename }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

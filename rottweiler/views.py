@@ -1,31 +1,55 @@
-import inspect
-
-from rulez.registry import registry
-
 from django.core.exceptions import PermissionDenied
-from django.views.generic import DetailView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import  Group
+from django.db.models import Q
+from django.views.generic import TemplateView
+
+from .view_helpers import (
+    get_all_rules,
+    get_all_views,
+    find_roles_for_permission,
+)
 
 
-class ShowAllRules(DetailView):
+class SuperUserOnly(object):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return super(SuperUserOnly, self).get(request, *args, **kwargs)
+
+
+class ListUrls(SuperUserOnly, TemplateView):
+    template_name = 'rottweiler/urls.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(ListUrls, self).get_context_data(**kwargs)
+        context_data['object'] = get_all_views()
+
+        return context_data
+
+
+class ShowPermission(SuperUserOnly, TemplateView):
+    template_name = 'rottweiler/permission.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(ShowPermission, self).get_context_data(**kwargs)
+
+        context_data['user_groups'] = Group.objects.filter(
+                Q(permissions__codename=kwargs['codename'])
+            ).distinct()
+        context_data['users'] = get_user_model().objects.filter(
+                Q(user_permissions__codename=kwargs['codename'])
+            ).distinct()
+        context_data['roles'] = find_roles_for_permission(kwargs['app_label'], kwargs['codename'])
+
+        return context_data
+
+
+class ShowAllRules(SuperUserOnly, TemplateView):
     template_name = 'rottweiler/index.html'
 
-    def get_object(self, queryset=None):
-        if not self.request.user.is_superuser:
-            raise PermissionDenied
+    def get_context_data(self, **kwargs):
+        context_data = super(ShowAllRules, self).get_context_data(**kwargs)
+        context_data['object'] = get_all_rules()
 
-        all_rules = []
-
-        for k, v in registry.iteritems():
-            class_name = k.__name__
-            permissions = []
-            for rule_name, rule in v.iteritems():
-                definition = "".join(
-                    inspect.getsourcelines(
-                        getattr(rule.model(), rule.field_name))[0][1:])
-                permissions.append({'name': rule_name,
-                                    'definition': definition})
-
-            all_rules.append({'model_name': class_name,
-                              'permissions': permissions})
-
-        return all_rules
+        return context_data
