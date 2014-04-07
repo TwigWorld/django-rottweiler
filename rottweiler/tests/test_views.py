@@ -1,18 +1,65 @@
+from mock import patch, Mock
+
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.test import TestCase, RequestFactory
 
 from rottweiler import registry
-from rottweiler.views import ShowAllRules
+from rottweiler.views import ShowAllRules, ListUrls, ShowPermission
 from .stubs import ModelStub
-
 
 def first_permission(self, user):
     return user.is_superuser or user.is_staff
 
-
 def second_permission(self, user):
     return user.is_active
+
+
+class TestShowPermissionView(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.request = self.factory.get("list-urls/project/barkbark/")
+
+    @patch('rottweiler.views.get_user_model')
+    @patch('rottweiler.views.Group')
+    def test_show_permission(self, group_filter, user_filter):
+        url = reverse('rottweiler:all_rules')
+        self.request.user = User(is_superuser=True)
+        view = ShowPermission.as_view()
+
+        response = view(self.request, codename='change_user', app_label='project')
+
+        self.assertEqual(response.context_data['users'], user_filter().objects.filter().distinct())
+        self.assertEqual(response.context_data['user_groups'], group_filter.objects.filter().distinct())
+        self.assertEqual(response.context_data['roles'], ['    return True\n', '    return True\n'])
+
+        self.assertEqual(200, response.status_code)
+
+
+class TestShowAllUrlsView(TestCase):
+    def setUp(self):
+        self.request = RequestFactory()
+        self.request.method = 'GET'
+        
+    @patch('rottweiler.view_helpers.Permission.objects.get')
+    def test_list_all_urls(self, permission_get):
+        permission_get.return_value = Mock(
+            codename="lala.lalala",
+            content_type=Mock(app_label="lala")
+        )
+        self.request.user = User(is_superuser=True)
+        view = ListUrls.as_view()
+
+        response = view(self.request)
+
+        self.assertEqual(response.context_data['object'], 
+            [{'module': 'project.views',
+              'name': 'RottyView',
+              'permission_applabel': 'lala',
+              'permission_codename': 'lala.lalala',
+              'url': '/rottywookieman/'}])
+        self.assertEqual(200, response.status_code)
 
 
 class TestShowAllRulesView(TestCase):

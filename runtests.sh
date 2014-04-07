@@ -18,16 +18,22 @@ if [ $ci == true ]; then
   pushd .
   cd tests/testapp
   coverage run manage.py test rottweiler
+  status=$?
   popd
+  exit $status
 elif [ $coverage == true ]; then
   pushd .
   cd tests/testapp
   coverage run manage.py test rottweiler
+  status=$?
   coverage html
   open -a Google\ Chrome htmlcov/index.html
+  exit $status
 else
   pushd .
   cd tests/testapp
   python manage.py test rottweiler
+  status=$?
   popd
+  exit $status
 fi

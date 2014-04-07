@@ -15,7 +15,7 @@ class SuperUserOnly(object):
     def get(self, request, *args, **kwargs):
         if not request.user.is_superuser:
             raise PermissionDenied
-        return  super(SuperUserOnly, self).get(request, *args, **kwargs)
+        return super(SuperUserOnly, self).get(request, *args, **kwargs)
 
 
 class ListUrls(SuperUserOnly, TemplateView):
