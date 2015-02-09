@@ -14,7 +14,7 @@ for root, dirs, files in os.walk(os.path.join('rottweiler', 'templates')):
 
 setup(
     name='django-rottweiler',
-    version='1.0.0',
+    version='1.1.0',
     packages=find_packages(),
     package_data={'': PACKAGE_DATA},
     license='MIT License',
