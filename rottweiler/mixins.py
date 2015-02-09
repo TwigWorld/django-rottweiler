@@ -36,7 +36,10 @@ class PermissionRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_restricted_object()
 
-        if not request.user.has_perm(self.permission_required, obj):
+        if (
+            not request.user.has_perm(self.permission_required, obj) and
+            not request.user.has_perm(self.permission_required)
+        ):
             raise PermissionDenied
         return super(PermissionRequiredMixin, self).dispatch(
             request, *args, **kwargs)

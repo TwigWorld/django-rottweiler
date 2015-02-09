@@ -63,7 +63,7 @@ class TestPermissionRequiredMixin(TestCase):
         view = PermissionView()
         with self.assertRaises(PermissionDenied):
             view.dispatch(request)
-        has_perm.assert_called_with('test_permission', 'object')
+        has_perm.assert_any_call('test_permission', 'object')
 
     @patch('django.contrib.auth.models.User.has_perm')
     def test_user_given_access_if_they_have_permission(self, has_perm):
