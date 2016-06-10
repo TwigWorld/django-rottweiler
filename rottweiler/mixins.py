@@ -31,18 +31,23 @@ class PermissionRequiredMixin(object):
             ...
     """
     permission_required = ''
+    allow_staff=False
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_restricted_object()
 
         if (
-            not request.user.has_perm(self.permission_required, obj) and
-            not request.user.has_perm(self.permission_required)
+            (self.allow_staff and request.user.is_staff) or
+            request.user.has_perm(self.permission_required, obj) or
+            request.user.has_perm(self.permission_required)
+            
         ):
-            raise PermissionDenied
-        return super(PermissionRequiredMixin, self).dispatch(
-            request, *args, **kwargs)
+            return super(PermissionRequiredMixin, self).dispatch(
+                request, *args, **kwargs)       
+        
+        raise PermissionDenied
+
 
     def get_restricted_object(self):
         try:
