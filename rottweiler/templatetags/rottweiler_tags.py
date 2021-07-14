@@ -11,7 +11,7 @@ class RottweilerPermsNode(template.Node):
         self.varname = varname
 
     def render(self, context):
-        user_obj = template.resolve_variable('user', context)
+        user_obj = template.Variable('user').resolve(context)
         context[self.varname] = user_obj.has_perm(self.codename)
         return ''
 
