@@ -8,3 +8,7 @@
 .coveragerc
 coverage.xml
 htmlcov
+
+
+# pycharm
+.idea/
