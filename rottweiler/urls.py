@@ -10,9 +10,9 @@ rottweiler_urlpatterns = [
     url(r'^list-urls/(?P<app_label>\w+)/(?P<codename>\w+)/$',
         ShowPermission.as_view(),
         name="show_permission"
-    ),
+        ),
 ]
 
 urlpatterns = [
-    url(r'^', include(rottweiler_urlpatterns, namespace="rottweiler")),
+    url(r'^', include((rottweiler_urlpatterns,), namespace="rottweiler")),
 ]
