@@ -14,7 +14,7 @@ for root, dirs, files in os.walk(os.path.join('rottweiler', 'templates')):
 
 setup(
     name='django-rottweiler',
-    version='1.1.0',
+    version='2.0.0',
     packages=find_packages(),
     package_data={'': PACKAGE_DATA},
     license='MIT License',
@@ -23,5 +23,9 @@ setup(
     url='https://github.com/TwigWorld/django-rottweiler',
     long_description=README,
     author='Charlie Quinn & Chris Wright',
-    install_requires=["Django >= 1.4", "django-rulez == 1.0.1"]
+    python_requires='>=3.7.0',
+    install_requires=[
+        "Django>=1.11, <2.0",
+        "django-rulez@git+https://github.com/chrisglass/django-rulez.git@0f869f330a7e50aacf953265e1ce16ada16cb98a#egg=django-rulez-1.0.2",
+    ],
 )
