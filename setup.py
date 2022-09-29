@@ -23,7 +23,7 @@ setup(
     url='https://github.com/TwigWorld/django-rottweiler',
     long_description=README,
     author='Charlie Quinn & Chris Wright',
-    python_requires='>=3.7.0',
+    python_requires='>=2.7.0',
     install_requires=[
         "Django>=1.11, <2.0",
         "django-rulez@git+https://github.com/chrisglass/django-rulez.git@0f869f330a7e50aacf953265e1ce16ada16cb98a#egg=django-rulez-1.0.2",
