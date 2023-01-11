@@ -3,7 +3,7 @@ import importlib
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+from django.urls import URLPattern, URLResolver
 from django.core.exceptions import ViewDoesNotExist
 
 from rulez.registry import registry
@@ -51,12 +51,12 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
     """
     views = []
     for p in urlpatterns:
-        if isinstance(p, RegexURLPattern):
+        if isinstance(p, URLPattern):
             try:
                 views.append((p.callback, base + p.regex.pattern, p.name))
             except ViewDoesNotExist:
                 continue
-        elif isinstance(p, RegexURLResolver):
+        elif isinstance(p, URLResolver):
             try:
                 patterns = p.url_patterns
             except ImportError:

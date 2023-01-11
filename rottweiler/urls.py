@@ -14,5 +14,5 @@ rottweiler_urlpatterns = [
 ]
 
 urlpatterns = [
-    url(r'^', include(rottweiler_urlpatterns, namespace="rottweiler")),
+    url(r'^', include((rottweiler_urlpatterns, 'rottweiler'), namespace="rottweiler")),
 ]
