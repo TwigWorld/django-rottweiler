@@ -19,10 +19,10 @@ except ImportError:
 def get_all_rules():
     all_rules = []
 
-    for k, v in registry.iteritems():
+    for k, v in registry.items():
         class_name = k.__name__
         permissions = []
-        for rule_name, rule in v.iteritems():
+        for rule_name, rule in v.items():
             definition = "".join(
                 inspect.getsourcelines(
                     getattr(rule.model(), rule.field_name))[0][1:])
@@ -35,6 +35,7 @@ def get_all_rules():
     return all_rules
 
 def find_roles_for_permission(app_label, codename):
+    print(app_label, codename, "[][][]]]]]]]]]]]]")
     roles = []
     for model_permissions in get_all_rules():
         for permission in model_permissions['permissions']:
