@@ -25,7 +25,7 @@ setup(
     author='Charlie Quinn & Chris Wright',
     python_requires='>=3.7.0',
     install_requires=[
-        "Django>=2.2, <3.2",
+        "Django>=2.2, <3.0",
         "django-rulez@git+https://github.com/TwigWorld/django-rulez.git@547b246e7531df260828381598f30ad01125b4a5#egg=django-rulez-1.0.2",
     ],
 )
