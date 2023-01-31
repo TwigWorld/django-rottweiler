@@ -35,7 +35,6 @@ def get_all_rules():
     return all_rules
 
 def find_roles_for_permission(app_label, codename):
-    print(app_label, codename, "[][][]]]]]]]]]]]]")
     roles = []
     for model_permissions in get_all_rules():
         for permission in model_permissions['permissions']:
