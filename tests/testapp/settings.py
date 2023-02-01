@@ -100,3 +100,5 @@ STATIC_URL = '/static/'
 AUTHENTICATION_BACKENDS = [
     "rottweiler.backends.PermissionBackend",
 ]
+
+ADMIN_FOR = []
