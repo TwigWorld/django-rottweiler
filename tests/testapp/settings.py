@@ -22,6 +22,20 @@ SECRET_KEY = '@a!i%!khmywr@h&rsw*^jyx2-q&zj4$e+-rsz$a#b#1-ah(r^b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -40,7 +54,7 @@ INSTALLED_APPS = (
     'project',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

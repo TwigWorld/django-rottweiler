@@ -28,4 +28,7 @@ setup(
         "Django>=2.2, <3.0",
         "django-rulez@git+https://github.com/TwigWorld/django-rulez.git@547b246e7531df260828381598f30ad01125b4a5#egg=django-rulez-1.0.2",
     ],
+    extras_require={
+        "testing": ["pytest", "mock"]
+    },
 )
