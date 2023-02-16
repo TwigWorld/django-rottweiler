@@ -3,7 +3,10 @@ import importlib
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.urls import URLPattern, URLResolver
+try:
+    from django.core.urlresolvers import RegexURLPattern as URLPattern, RegexURLResolver as URLResolver
+except ImportError:
+    from django.urls import URLPattern, URLResolver
 from django.core.exceptions import ViewDoesNotExist
 
 from rulez.registry import registry
