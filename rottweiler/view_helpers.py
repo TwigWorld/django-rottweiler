@@ -1,12 +1,17 @@
 import inspect
 import importlib
+import sys
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
 try:
-    from django.core.urlresolvers import RegexURLPattern as URLPattern, RegexURLResolver as URLResolver
+    # python2 code that need to be removed later
+    from django.core.urlresolvers import RegexURLPattern as URLPattern
+    from django.core.urlresolvers import RegexURLResolver as URLResolver
+    PYTHON3 = False
 except ImportError:
     from django.urls import URLPattern, URLResolver
+    PYTHON3 = True
 from django.core.exceptions import ViewDoesNotExist
 
 from rulez.registry import registry
@@ -54,9 +59,13 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
     """
     views = []
     for p in urlpatterns:
+        if PYTHON3 is True:
+            regex_pattern = p.pattern.regex.pattern
+        else:
+            regex_pattern = p.regex.pattern
         if isinstance(p, URLPattern):
             try:
-                views.append((p.callback, base + p.pattern.regex.pattern, p.name))
+                views.append((p.callback, base + regex_pattern, p.name))
             except ViewDoesNotExist:
                 continue
         elif isinstance(p, URLResolver):
@@ -64,10 +73,10 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
                 patterns = p.url_patterns
             except ImportError:
                 continue
-            views.extend(extract_views_from_urlpatterns(patterns, base + p.pattern.regex.pattern))
+            views.extend(extract_views_from_urlpatterns(patterns, base + regex_pattern))
         elif hasattr(p, '_get_callback'):
             try:
-                views.append((p._get_callback(), base + p.pattern.regex.pattern, p.name))
+                views.append((p._get_callback(), base + regex_pattern, p.name))
             except ViewDoesNotExist:
                 continue
         elif hasattr(p, 'url_patterns') or hasattr(p, '_get_url_patterns'):
@@ -75,7 +84,7 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
                 patterns = p.url_patterns
             except ImportError:
                 continue
-            views.extend(extract_views_from_urlpatterns(patterns, base + p.pattern.regex.pattern))
+            views.extend(extract_views_from_urlpatterns(patterns, base + regex_pattern))
         else:
             raise TypeError("%s does not appear to be a urlpattern object" % p)
     return views
