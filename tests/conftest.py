@@ -61,5 +61,6 @@ def pytest_configure(config):
         PASSWORD_HASHERS=(
             'django.contrib.auth.hashers.MD5PasswordHasher',
         ),
+        ADMIN_FOR = []
     )
     django.setup()
