@@ -8,16 +8,16 @@ from rottweiler.backends import PermissionBackend
 from .stubs import ModelStub
 
 
-def test_global_permission(self, user):
+def dummy_global_permission(self, user):
     return user.is_staff
 
 
-def test_object_permission(self, user):
+def dummy_object_permission(self, user):
     return self.return_value
 
 
-registry.register('test_app.test_permission', test_global_permission)
-registry.register('test_app.test_permission', test_object_permission, ModelStub)
+registry.register('test_app.test_permission', dummy_global_permission)
+registry.register('test_app.test_permission', dummy_object_permission, ModelStub)
 
 
 class TestBackends(TestCase):
