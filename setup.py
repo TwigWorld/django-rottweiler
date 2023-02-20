@@ -28,6 +28,6 @@ setup(
         "django-rulez@git+https://github.com/TwigWorld/django-rulez.git@2.0.0#egg=django-rulez",
     ],
     extras_require={
-        "testing": ["pytest", "mock"]
+        "testing": ["mock", "pytest", "pytest-django"]
     },
 )
