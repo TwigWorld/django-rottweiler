@@ -8,20 +8,19 @@ from rottweiler.backends import PermissionBackend
 from .stubs import ModelStub
 
 
-def test_global_permission(self, user):
-    return user.is_staff
-
-
-def test_object_permission(self, user):
-    return self.return_value
-
-
-registry.register('test_app.test_permission', test_global_permission)
-registry.register('test_app.test_permission', test_object_permission, ModelStub)
-
-
 class TestBackends(TestCase):
     User = get_user_model()
+
+    def setUp(self):
+        def test_global_permission(self, user):
+            return user.is_staff
+
+        def test_object_permission(self, user):
+            return self.return_value
+    
+        registry.register('test_app.test_permission', test_global_permission)
+        registry.register('test_app.test_permission', test_object_permission, ModelStub)
+
     def test_user_is_checked_for_global_rule_permission(self):
         user = self.User(is_active=True, is_staff=True)
         user.save()

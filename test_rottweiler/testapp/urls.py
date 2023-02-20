@@ -6,7 +6,7 @@ admin.autodiscover()
 import rottweiler
 rottweiler.fetch_permissions()
 
-from project.views import RottyView
+from test_rottweiler.testapp.project.views import RottyView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -12,7 +12,7 @@ def positive_permission(self, user):
 
 
 def negative_permission(self, user):
-        return False
+    return False
 
 
 class TestRottweilerPerms(TestCase):

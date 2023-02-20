@@ -5,7 +5,7 @@ from rottweiler import registry
 from .stubs import ModelStub
 
 
-def test_permission(self, user):
+def test_permission():
     return True
 
 
