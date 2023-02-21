@@ -1,9 +1,17 @@
 import inspect
 import importlib
+import sys
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.core.urlresolvers import RegexURLPattern, RegexURLResolver
+try:
+    # python2 code that need to be removed later
+    from django.core.urlresolvers import RegexURLPattern as URLPattern
+    from django.core.urlresolvers import RegexURLResolver as URLResolver
+    PYTHON3 = False
+except ImportError:
+    from django.urls import URLPattern, URLResolver
+    PYTHON3 = True
 from django.core.exceptions import ViewDoesNotExist
 
 from rulez.registry import registry
@@ -19,10 +27,10 @@ except ImportError:
 def get_all_rules():
     all_rules = []
 
-    for k, v in registry.iteritems():
+    for k, v in registry.items():
         class_name = k.__name__
         permissions = []
-        for rule_name, rule in v.iteritems():
+        for rule_name, rule in v.items():
             definition = "".join(
                 inspect.getsourcelines(
                     getattr(rule.model(), rule.field_name))[0][1:])
@@ -51,20 +59,24 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
     """
     views = []
     for p in urlpatterns:
-        if isinstance(p, RegexURLPattern):
+        if PYTHON3 is True:
+            regex_pattern = p.pattern.regex.pattern
+        else:
+            regex_pattern = p.regex.pattern
+        if isinstance(p, URLPattern):
             try:
-                views.append((p.callback, base + p.regex.pattern, p.name))
+                views.append((p.callback, base + regex_pattern, p.name))
             except ViewDoesNotExist:
                 continue
-        elif isinstance(p, RegexURLResolver):
+        elif isinstance(p, URLResolver):
             try:
                 patterns = p.url_patterns
             except ImportError:
                 continue
-            views.extend(extract_views_from_urlpatterns(patterns, base + p.regex.pattern))
+            views.extend(extract_views_from_urlpatterns(patterns, base + regex_pattern))
         elif hasattr(p, '_get_callback'):
             try:
-                views.append((p._get_callback(), base + p.regex.pattern, p.name))
+                views.append((p._get_callback(), base + regex_pattern, p.name))
             except ViewDoesNotExist:
                 continue
         elif hasattr(p, 'url_patterns') or hasattr(p, '_get_url_patterns'):
@@ -72,7 +84,7 @@ def extract_views_from_urlpatterns(urlpatterns, base=''):
                 patterns = p.url_patterns
             except ImportError:
                 continue
-            views.extend(extract_views_from_urlpatterns(patterns, base + p.regex.pattern))
+            views.extend(extract_views_from_urlpatterns(patterns, base + regex_pattern))
         else:
             raise TypeError("%s does not appear to be a urlpattern object" % p)
     return views

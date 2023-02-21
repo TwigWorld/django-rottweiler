@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.template import Template, Context
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from rottweiler import registry
 from .stubs import ModelStub
@@ -16,11 +16,12 @@ def negative_permission(self, user):
 
 
 class TestRottweilerPerms(TestCase):
+    User = get_user_model()
     def test_user_has_permissions_against_model_instance(self):
         registry.register('positive_permission',
                           positive_permission,
                           ModelStub)
-        user = User()
+        user = self.User()
         user.save()
         context = Context({'user': user, 'object': ModelStub()})
         template = Template("""
@@ -34,7 +35,7 @@ class TestRottweilerPerms(TestCase):
         registry.register('negative_permission',
                           negative_permission,
                           ModelStub)
-        user = User()
+        user = self.User()
         user.save()
         context = Context({'user': user, 'object': ModelStub()})
         template = Template("""
@@ -47,7 +48,7 @@ class TestRottweilerPerms(TestCase):
     def test_user_has_global_permissions(self):
         registry.register('positive_permission',
                           positive_permission)
-        user = User()
+        user = self.User()
         user.save()
         context = Context({'user': user})
         template = Template("""
@@ -60,7 +61,7 @@ class TestRottweilerPerms(TestCase):
     def test_user_does_not_have_global_permissions(self):
         registry.register('negative_permission',
                           negative_permission)
-        user = User()
+        user = self.User()
         user.save()
         context = Context({'user': user})
         template = Template("""

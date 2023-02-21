@@ -2,7 +2,7 @@ from mock import patch, Mock
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase, RequestFactory
 
 from rottweiler import registry

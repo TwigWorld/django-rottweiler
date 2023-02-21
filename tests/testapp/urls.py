@@ -9,7 +9,7 @@ rottweiler.fetch_permissions()
 from project.views import RottyView
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'rottweiler/', include('rottweiler.urls')),
     url(r'rottywookieman/$',RottyView.as_view(),name='rotty_wookie'),
 ]
