@@ -1,5 +1,7 @@
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages
+from setuptools import setup
 
 README = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
 
@@ -25,5 +27,15 @@ setup(
         "Django<3",
         "django-rulez@git+https://github.com/TwigWorld/django-rulez.git@2.0.0#egg=django-rulez",
     ],
-    extras_require={"testing": ["mock", "pytest", "pytest-django", "black", ]},
+    extras_require={
+        "testing": [
+            "mock",
+            "pytest",
+            "pytest-django",
+            "black",
+            "isort",
+            "pre-commit",
+            "check_pdb_hook",
+        ]
+    },
 )
