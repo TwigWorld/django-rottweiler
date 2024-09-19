@@ -8,9 +8,9 @@ def fetch_permissions():
         # try to import the submodule and fail silently if it is
         # not present
         try:
-            import_module('%s.permissions' % app)
+            import_module("%s.permissions" % app)
         # raise the exception if it is not related to the submodule
         # being absent
         except:
-            if module_has_submodule(mod, 'permissions'):
+            if module_has_submodule(mod, "permissions"):
                 raise

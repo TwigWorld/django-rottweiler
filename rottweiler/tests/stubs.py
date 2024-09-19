@@ -4,7 +4,7 @@ class ModelStub(object):
 
     @classmethod
     def add_to_class(cls, name, value):
-        if hasattr(value, 'contribute_to_class'):
+        if hasattr(value, "contribute_to_class"):
             value.contribute_to_class(cls, name)
         else:
             setattr(cls, name, value)

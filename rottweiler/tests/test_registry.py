@@ -11,14 +11,15 @@ def dummy_permission(user):
 
 class TestRegistry(TestCase):
     User = get_user_model()
+
     def test_add_object_permission(self):
-        registry.register('test_permission', dummy_permission, ModelStub)
+        registry.register("test_permission", dummy_permission, ModelStub)
         user = self.User()
         user.save()
-        self.assertTrue(user.has_perm('test_permission', ModelStub()))
+        self.assertTrue(user.has_perm("test_permission", ModelStub()))
 
     def test_add_global_permission(self):
-        registry.register('test_permission', dummy_permission)
+        registry.register("test_permission", dummy_permission)
         user = self.User()
         user.save()
-        self.assertTrue(user.has_perm('test_permission'))
+        self.assertTrue(user.has_perm("test_permission"))
