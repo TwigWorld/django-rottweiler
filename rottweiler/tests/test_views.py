@@ -1,12 +1,17 @@
-from mock import patch, Mock
-
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.test import RequestFactory
+from django.test import TestCase
 from django.urls import reverse
-from django.test import TestCase, RequestFactory
+
+from mock import Mock
+from mock import patch
 
 from rottweiler import registry
-from rottweiler.views import ShowAllRules, ListUrls, ShowPermission
+from rottweiler.views import ListUrls
+from rottweiler.views import ShowAllRules
+from rottweiler.views import ShowPermission
+
 from .stubs import ModelStub
 
 
@@ -32,18 +37,19 @@ class TestShowPermissionView(TestCase):
 
         response = view(self.request, codename="change_user", app_label="project")
 
-        self.assertEqual(
-            response.context_data["users"], user_filter().objects.filter().distinct()
-        )
-        self.assertEqual(
-            response.context_data["user_groups"],
-            group_filter.objects.filter().distinct(),
-        )
-        self.assertEqual(
-            response.context_data["roles"], ["    return True\n", "    return True\n"]
+        assert (
+            response.context_data["users"] == user_filter().objects.filter().distinct()
         )
 
-        self.assertEqual(200, response.status_code)
+        assert (
+            response.context_data["user_groups"]
+            == group_filter.objects.filter().distinct()
+        )
+        assert response.context_data["roles"] == [
+            "    return True\n",
+            "    return True\n",
+        ]
+        assert 200 == response.status_code
 
 
 class TestShowAllUrlsView(TestCase):
@@ -61,19 +67,17 @@ class TestShowAllUrlsView(TestCase):
 
         response = view(self.request)
 
-        self.assertEqual(
-            response.context_data["object"],
-            [
-                {
-                    "module": "project.views",
-                    "name": "RottyView",
-                    "permission_applabel": "lala",
-                    "permission_codename": "lala.lalala",
-                    "url": "/rottywookieman/",
-                }
-            ],
-        )
-        self.assertEqual(200, response.status_code)
+        assert response.context_data["object"] == [
+            {
+                "module": "project.views",
+                "name": "RottyView",
+                "permission_applabel": "lala",
+                "permission_codename": "lala.lalala",
+                "url": "/rottywookieman/",
+            }
+        ]
+
+        assert 200 == response.status_code
 
 
 class TestShowAllRulesView(TestCase):
@@ -91,7 +95,7 @@ class TestShowAllRulesView(TestCase):
         self.request.user = User(is_superuser=True)
         view = ShowAllRules.as_view()
         response = view(self.request)
-        self.assertEqual(200, response.status_code)
+        assert 200 == response.status_code
 
     def test_assigns_list_of_all_rules_to_object(self):
         registry.register("first_permission", first_permission, ModelStub)
