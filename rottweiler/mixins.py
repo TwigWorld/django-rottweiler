@@ -10,7 +10,7 @@ class LoginRequiredMixin(object):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PermissionRequiredMixin(object):
@@ -41,7 +41,7 @@ class PermissionRequiredMixin(object):
             self.permission_required, obj
         ) and not request.user.has_perm(self.permission_required):
             raise PermissionDenied
-        return super(PermissionRequiredMixin, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_restricted_object(self):
         try:

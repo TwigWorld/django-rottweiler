@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
+from django.conf.urls import include
+from django.conf.urls import url
 
-from django.conf.urls import include, url
-
-from .views import ShowAllRules, ListUrls, ShowPermission
+from .views import ListUrls
+from .views import ShowAllRules
+from .views import ShowPermission
 
 rottweiler_urlpatterns = [
     url(r"^show-all-rules$", ShowAllRules.as_view(), name="all_rules"),

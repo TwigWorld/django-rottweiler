@@ -1,21 +1,12 @@
-import inspect
 import importlib
+import inspect
 import sys
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
-
-try:
-    # python2 code that need to be removed later
-    from django.core.urlresolvers import RegexURLPattern as URLPattern
-    from django.core.urlresolvers import RegexURLResolver as URLResolver
-
-    PYTHON3 = False
-except ImportError:
-    from django.urls import URLPattern, URLResolver
-
-    PYTHON3 = True
 from django.core.exceptions import ViewDoesNotExist
+from django.urls import URLPattern
+from django.urls import URLResolver
 
 from rulez.registry import registry
 
@@ -26,7 +17,8 @@ try:
     assert simplify_regex
 except ImportError:
     # fall back to trunk, pre-NFA merge
-    from django.contrib.admin.views.doc import simplify_regex
+    # from django.contrib.admin.views.doc import simplify_regex
+    from django.contrib.admin.views import simplify_regex
 
 
 def get_all_rules():
@@ -50,7 +42,7 @@ def find_roles_for_permission(app_label, codename):
     roles = []
     for model_permissions in get_all_rules():
         for permission in model_permissions["permissions"]:
-            if permission["name"] == "%s.%s" % (app_label, codename):
+            if permission["name"] == f"{app_label}.{codename}":
                 roles.append(permission["definition"])
 
     return roles
@@ -64,10 +56,8 @@ def extract_views_from_urlpatterns(urlpatterns, base=""):
     """
     views = []
     for p in urlpatterns:
-        if PYTHON3 is True:
-            regex_pattern = p.pattern.regex.pattern
-        else:
-            regex_pattern = p.regex.pattern
+        regex_pattern = p.pattern.regex.pattern
+
         if isinstance(p, URLPattern):
             try:
                 views.append((p.callback, base + regex_pattern, p.name))
@@ -91,7 +81,7 @@ def extract_views_from_urlpatterns(urlpatterns, base=""):
                 continue
             views.extend(extract_views_from_urlpatterns(patterns, base + regex_pattern))
         else:
-            raise TypeError("%s does not appear to be a urlpattern object" % p)
+            raise TypeError(f"{p} does not appear to be a urlpattern object")
     return views
 
 

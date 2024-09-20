@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 PACKAGE_DATA = list()
 for root, dirs, files in os.walk(os.path.join("rottweiler", "templates")):
     for filename in files:
-        PACKAGE_DATA.append("%s/%s" % (root[len("rottweiler") + 1 :], filename))
+        PACKAGE_DATA.append(f"{root[len('rottweiler') + 1 :]}/{filename}")
 
 setup(
     name="django-rottweiler",
