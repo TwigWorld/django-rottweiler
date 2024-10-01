@@ -11,9 +11,9 @@ class RottweilerPermsNode(template.Node):
         self.varname = varname
 
     def render(self, context):
-        user_obj = template.Variable('user').resolve(context)
+        user_obj = template.Variable("user").resolve(context)
         context[self.varname] = user_obj.has_perm(self.codename)
-        return ''
+        return ""
 
 
 def rottweiler_perms(parser, token):
@@ -42,11 +42,10 @@ def rottweiler_perms(parser, token):
     if len(bits) == 5:
         return rulez_perms(parser, token)
     if len(bits) != 4:
-        raise template.TemplateSyntaxError(
-            'tag requires two or three arguments')
-    if bits[2] != 'as':
-        raise template.TemplateSyntaxError(
-            "second argument to tag must be 'as'")
+        raise template.TemplateSyntaxError("tag requires two or three arguments")
+    if bits[2] != "as":
+        raise template.TemplateSyntaxError("second argument to tag must be 'as'")
     return RottweilerPermsNode(bits[1], bits[3])
+
 
 register.tag(rottweiler_perms)
