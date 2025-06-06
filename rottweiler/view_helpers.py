@@ -3,6 +3,7 @@ import inspect
 import sys
 
 from django.conf import settings
+from django.contrib.admindocs.views import simplify_regex
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ViewDoesNotExist
 from django.urls import URLPattern
@@ -10,20 +11,9 @@ from django.urls import URLResolver
 
 from rulez.registry import registry
 
-try:
-    # 2008-05-30 admindocs found in newforms-admin brand
-    from django.contrib.admindocs.views import simplify_regex
-
-    assert simplify_regex
-except ImportError:
-    # fall back to trunk, pre-NFA merge
-    # from django.contrib.admin.views.doc import simplify_regex
-    from django.contrib.admin.views import simplify_regex
-
 
 def get_all_rules():
     all_rules = []
-
     for k, v in registry.items():
         class_name = k.__name__
         permissions = []
@@ -44,7 +34,6 @@ def find_roles_for_permission(app_label, codename):
         for permission in model_permissions["permissions"]:
             if permission["name"] == f"{app_label}.{codename}":
                 roles.append(permission["definition"])
-
     return roles
 
 
@@ -57,7 +46,6 @@ def extract_views_from_urlpatterns(urlpatterns, base=""):
     views = []
     for p in urlpatterns:
         regex_pattern = p.pattern.regex.pattern
-
         if isinstance(p, URLPattern):
             try:
                 views.append((p.callback, base + regex_pattern, p.name))
@@ -90,7 +78,6 @@ def get_all_views():
         settings_modules = [__import__(m, {}, {}, [""]) for m in settings.ADMIN_FOR]
     else:
         settings_modules = [settings]
-
     views = []
     for settings_mod in settings_modules:
         try:
@@ -98,7 +85,6 @@ def get_all_views():
         except:
             continue
     view_functions = extract_views_from_urlpatterns(urlconf.urlpatterns)
-
     for func, regex, url_name in view_functions:
         if hasattr(func, "__name__"):
             func_name = func.__name__
@@ -111,7 +97,6 @@ def get_all_views():
                     )
                 except:
                     perm = None
-
                 if perm:
                     views.append(
                         {
@@ -122,5 +107,4 @@ def get_all_views():
                             "url": simplify_regex(regex),
                         }
                     )
-
     return views
