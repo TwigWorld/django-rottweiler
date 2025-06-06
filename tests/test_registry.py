@@ -1,25 +1,25 @@
-from django.test import TestCase
+from django.contrib.auth.models import User
 
-from django.contrib.auth import get_user_model
+import pytest
+
 from rottweiler import registry
-from .stubs import ModelStub
 
 
 def dummy_permission(user):
     return True
 
 
-class TestRegistry(TestCase):
-    User = get_user_model()
+@pytest.mark.django_db
+def test_add_object_permission(mock_model_stub):
+    registry.register("test_permission", dummy_permission, mock_model_stub)
+    user = User()
+    user.save()
+    assert user.has_perm("test_permission", mock_model_stub()) is True
 
-    def test_add_object_permission(self):
-        registry.register("test_permission", dummy_permission, ModelStub)
-        user = self.User()
-        user.save()
-        self.assertTrue(user.has_perm("test_permission", ModelStub()))
 
-    def test_add_global_permission(self):
-        registry.register("test_permission", dummy_permission)
-        user = self.User()
-        user.save()
-        self.assertTrue(user.has_perm("test_permission"))
+@pytest.mark.django_db
+def test_add_global_permission():
+    registry.register("test_permission", dummy_permission)
+    user = User()
+    user.save()
+    assert user.has_perm("test_permission") is True
