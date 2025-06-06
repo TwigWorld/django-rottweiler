@@ -25,17 +25,15 @@ setup(
     author="Charlie Quinn & Chris Wright",
     install_requires=[
         "Django<3",
-        "django-rulez@git+https://github.com/TwigWorld/django-rulez.git@2.0.0#egg=django-rulez",
     ],
     extras_require={
+        "twig": [
+            "django-rulez @ git+ssh://git@github.com/TwigWorld/django-rulez.git",
+        ],
         "testing": [
             "mock",
             "pytest",
             "pytest-django",
-            "black",
-            "isort",
-            "pre-commit",
-            "check_pdb_hook",
-        ]
+        ],
     },
 )
