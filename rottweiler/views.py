@@ -4,9 +4,9 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.views.generic import TemplateView
 
-from .view_helpers import find_roles_for_permission
-from .view_helpers import get_all_rules
-from .view_helpers import get_all_views
+from rottweiler.view_helpers import find_roles_for_permission
+from rottweiler.view_helpers import get_all_rules
+from rottweiler.view_helpers import get_all_views
 
 
 class SuperUserOnly(object):
@@ -22,7 +22,6 @@ class ListUrls(SuperUserOnly, TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["object"] = get_all_views()
-
         return context_data
 
 
@@ -31,7 +30,6 @@ class ShowPermission(SuperUserOnly, TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-
         context_data["user_groups"] = Group.objects.filter(
             Q(permissions__codename=kwargs["codename"])
         ).distinct()
@@ -43,7 +41,6 @@ class ShowPermission(SuperUserOnly, TemplateView):
         context_data["roles"] = find_roles_for_permission(
             kwargs["app_label"], kwargs["codename"]
         )
-
         return context_data
 
 
@@ -53,5 +50,4 @@ class ShowAllRules(SuperUserOnly, TemplateView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data["object"] = get_all_rules()
-
         return context_data
