@@ -1,3 +1,6 @@
+__version__ = "2.1.0"
+
+
 def fetch_permissions():
     from importlib import import_module
 
